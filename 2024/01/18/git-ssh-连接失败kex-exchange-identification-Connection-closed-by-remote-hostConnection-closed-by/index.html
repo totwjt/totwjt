@@ -1,0 +1,217 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>git ssh 连接失败kex_exchange_identification: Connection closed by remote hostConnection closed by... | J.W &#39;s Blog</title>
+  <meta name="author" content="Jestin Wang">
+  
+  <meta name="description" content="起初git在pull或者clone时报错， 如下：
+123456kex_exchange_identification: Connection closed by remote hostConnection closed by 127.0.0.1 port 33210fatal: Could not read from remote repository.Please make sure you have the correct access rightsand the repository exists.
+
+开始以为是 git global user.name 不一致， 或者是 ssh key 的问题， 都试了， 都不行。最后发现是 ssh 连接的问题，对比 ssh key 发现也是一致的。">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="git ssh 连接失败kex_exchange_identification: Connection closed by remote hostConnection closed by..."/>
+  <meta property="og:site_name" content="J.W &#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link rel="shortcut icon" href="/favicon.png">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <!--[if lt IE 9]><script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script><![endif]-->
+  
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">J.W &#39;s Blog</a></h1>
+  <h2><a href="/">Live My Life, Write My Code</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/null">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article id="post-git-ssh-连接失败kex-exchange-identification-Connection-closed-by-remote-hostConnection-closed-by" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2024-01-18T05:37:32.000Z"><a href="/2024/01/18/git-ssh-%E8%BF%9E%E6%8E%A5%E5%A4%B1%E8%B4%A5kex-exchange-identification-Connection-closed-by-remote-hostConnection-closed-by/">2024-01-18</a></time>
+      
+      
+  
+    <h1 class="p-name title" itemprop="headline name">git ssh 连接失败kex_exchange_identification: Connection closed by remote hostConnection closed by...</h1>
+  
+
+    </header>
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>起初git在pull或者clone时报错， 如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">kex_exchange_identification: Connection closed by remote host</span><br><span class="line">Connection closed by 127.0.0.1 port 33210</span><br><span class="line">fatal: Could not read from remote repository.</span><br><span class="line"></span><br><span class="line">Please make sure you have the correct access rights</span><br><span class="line">and the repository exists.</span><br></pre></td></tr></table></figure>
+
+<p>开始以为是 git global user.name 不一致， 或者是 ssh key 的问题， 都试了， 都不行。<br>最后发现是 ssh 连接的问题，对比 ssh key 发现也是一致的。</p>
+<span id="more"></span>
+
+<h1 id="情况是这样婶儿的"><a href="#情况是这样婶儿的" class="headerlink" title="情况是这样婶儿的"></a>情况是这样婶儿的</h1><h2 id="1-验证ssh-连接是否正常"><a href="#1-验证ssh-连接是否正常" class="headerlink" title="1. 验证ssh 连接是否正常"></a>1. 验证ssh 连接是否正常</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br><span class="line">Hi totwjt! You&#x27;ve successfully authenticated, but GitHub does not provide shell access.</span><br></pre></td></tr></table></figure>
+
+<p><em><strong>“自然是连接失败啊， 你这不是废话吗？”</strong></em></p>
+<h2 id="2-检查现有-SSH-密钥与-github-设置密钥是否一致"><a href="#2-检查现有-SSH-密钥与-github-设置密钥是否一致" class="headerlink" title="2. 检查现有 SSH 密钥与 github 设置密钥是否一致"></a>2. 检查现有 SSH 密钥与 github 设置密钥是否一致</h2><p>输入 ls -al ~&#x2F;.ssh 以查看是否存在现有的 SSH 密钥。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ls -al ~/.ssh</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Lists the files <span class="keyword">in</span> your .ssh directory, <span class="keyword">if</span> they exist</span></span><br></pre></td></tr></table></figure>
+
+<p><em><strong>“那自然也是存在的， 对比也是一致的不然有必要写个blog必要吗？废话+1”</strong></em></p>
+<h2 id="3-检查-github-com-ip-是否ping通"><a href="#3-检查-github-com-ip-是否ping通" class="headerlink" title="3. 检查 github.com ip 是否ping通"></a>3. 检查 github.com ip 是否ping通</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ping github.com</span><br><span class="line">PING github.com (20.205.243.166): 56 data bytes</span><br><span class="line">Request timeout for icmp_seq 0</span><br><span class="line">Request timeout for icmp_seq 1</span><br><span class="line">Request timeout for icmp_seq 2</span><br><span class="line">Request timeout for icmp_seq 3</span><br><span class="line">Request timeout for icmp_seq 4</span><br><span class="line">Request timeout for icmp_seq 5</span><br></pre></td></tr></table></figure>
+
+<p><em><strong>“这明显是ping不通啊， 难道是 github.com 挂了？ 网页明显能正常访问啊？”</strong></em></p>
+<h2 id="4-应该是这个ip段挂了-从这里选择一个地址修改host"><a href="#4-应该是这个ip段挂了-从这里选择一个地址修改host" class="headerlink" title="4. 应该是这个ip段挂了 从这里选择一个地址修改host"></a>4. 应该是这个ip段挂了 <a target="_blank" rel="noopener" href="https://api.github.com/meta">从这里选择一个地址</a>修改host</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ping github.com</span><br><span class="line">PING github.com (20.205.243.160): 56 data bytes</span><br><span class="line">64 bytes from 20.205.243.160: icmp_seq=0 ttl=109 time=90.434 ms</span><br><span class="line">64 bytes from 20.205.243.160: icmp_seq=1 ttl=109 time=92.741 ms</span><br><span class="line">64 bytes from 20.205.243.160: icmp_seq=2 ttl=109 time=88.886 ms</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git clone ...</span><br><span class="line">git@github.com: Permission denied (publickey).</span><br><span class="line">fatal: Could not read from remote repository.</span><br><span class="line"></span><br><span class="line">Please make sure you have the correct access rights</span><br><span class="line">and the repository exists.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br><span class="line">git@github.com: Permission denied (publickey).</span><br></pre></td></tr></table></figure>
+
+<p><em><strong>“地址修改后能正常ping通了， 但提示权限不足啊啊啊”</strong></em></p>
+<h2 id="5-加入代理-ssh-agent-ssh-add-ssh-id-rsa"><a href="#5-加入代理-ssh-agent-ssh-add-ssh-id-rsa" class="headerlink" title="5. 加入代理 ssh-agent &amp;&amp; ssh-add ~&#x2F;.ssh&#x2F;id_rsa"></a>5. 加入代理 ssh-agent &amp;&amp; ssh-add ~&#x2F;.ssh&#x2F;id_rsa</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-agent &amp;&amp; ssh-add ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure>
+
+<p>恢复正常了。</p>
+<h2 id="6-参考"><a href="#6-参考" class="headerlink" title="6. 参考"></a>6. 参考</h2><p><a target="_blank" rel="noopener" href="https://docs.github.com/zh/authentication/troubleshooting-ssh/error-permission-denied-publickey">官网文档</a><br><a target="_blank" rel="noopener" href="https://github.com/orgs/community/discussions/55269">#55269</a></p>
+<h2 id="7-github-配置ssh"><a href="#7-github-配置ssh" class="headerlink" title="7. github 配置ssh"></a>7. github 配置ssh</h2><p><a target="_blank" rel="noopener" href="https://docs.github.com/zh/authentication/connecting-to-github-with-ssh/about-ssh">使用 SSH 进行连接</a></p>
+<h2 id="8-修改全局名称时警告多个用户名"><a href="#8-修改全局名称时警告多个用户名" class="headerlink" title="8. 修改全局名称时警告多个用户名"></a>8. 修改全局名称时警告多个用户名</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">warning: user.name has multiple values</span><br><span class="line">error: cannot overwrite multiple values with a single value</span><br><span class="line"> Use a regexp, --add or --replace-all to change user.name.</span><br></pre></td></tr></table></figure>
+
+<p>这个警告表明在全局 Git 配置中存在多个用户名，可能是由于多次设置或者不同的配置来源导致的。解决这个问题可以采取以下步骤：</p>
+<p>1.使用 <code>--get-all</code> 查看多个用户名：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global --get-all user.name</span><br></pre></td></tr></table></figure>
+
+<p>这会列出所有在全局配置中设置的用户名。你可以看到是否有多个值。</p>
+<p>2.使用 <code>--replace-all</code> 修复配置：<br>如果确实存在多个值，你可以使用 –replace-all 选项来覆盖它们。例如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global --replace-all user.name xxx</span><br></pre></td></tr></table></figure>
+
+<p>这将用新的用户名 xxx 替换掉所有旧的用户名设置。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">pre</span>&gt;</span><span class="tag">&lt;<span class="name">code</span> <span class="attr">class</span>=<span class="string">&quot;yaml hljs&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;hljs-comment&quot;</span>&gt;</span># _config.yml<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;hljs-attr&quot;</span>&gt;</span>hexo:<span class="tag">&lt;/<span class="name">span</span>&gt;</span> <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;hljs-string&quot;</span>&gt;</span>hexo<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">code</span>&gt;</span><span class="tag">&lt;/<span class="name">pre</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/FixBug/">FixBug</a>
+  </div>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://example.com/2024/01/18/git-ssh-%E8%BF%9E%E6%8E%A5%E5%A4%B1%E8%B4%A5kex-exchange-identification-Connection-closed-by-remote-hostConnection-closed-by/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="as_sitesearch" value="example.com">
+  </form>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">Categories</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/FixBug/">FixBug</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/FixBug/">FixBug</a><small>1</small></li>
+  
+    <li><a href="/tags/app/">app</a><small>1</small></li>
+  
+    <li><a href="/tags/uniapp/">uniapp</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2024 Jestin Wang
+  
+</div>
+<div class="clearfix"></div></footer>
+  
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+
+
+<script src="/js/gallery.js"></script>
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+<script>
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

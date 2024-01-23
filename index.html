@@ -45,6 +45,45 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article id="post-git-ssh-连接失败kex-exchange-identification-Connection-closed-by-remote-hostConnection-closed-by" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time class="dt-published" datetime="2024-01-18T05:37:32.000Z"><a href="/2024/01/18/git-ssh-%E8%BF%9E%E6%8E%A5%E5%A4%B1%E8%B4%A5kex-exchange-identification-Connection-closed-by-remote-hostConnection-closed-by/">2024-01-18</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2024/01/18/git-ssh-%E8%BF%9E%E6%8E%A5%E5%A4%B1%E8%B4%A5kex-exchange-identification-Connection-closed-by-remote-hostConnection-closed-by/">git ssh 连接失败kex_exchange_identification: Connection closed by remote hostConnection closed by...</a></h1>
+  
+
+    </header>
+    <div class="e-content entry" itemprop="articleBody">
+      
+        <p>起初git在pull或者clone时报错， 如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">kex_exchange_identification: Connection closed by remote host</span><br><span class="line">Connection closed by 127.0.0.1 port 33210</span><br><span class="line">fatal: Could not read from remote repository.</span><br><span class="line"></span><br><span class="line">Please make sure you have the correct access rights</span><br><span class="line">and the repository exists.</span><br></pre></td></tr></table></figure>
+
+<p>开始以为是 git global user.name 不一致， 或者是 ssh key 的问题， 都试了， 都不行。<br>最后发现是 ssh 连接的问题，对比 ssh key 发现也是一致的。</p>
+      
+    </div>
+    <footer>
+      
+        
+          <div class="alignleft">
+            <a href="/2024/01/18/git-ssh-%E8%BF%9E%E6%8E%A5%E5%A4%B1%E8%B4%A5kex-exchange-identification-Connection-closed-by-remote-hostConnection-closed-by/#more" class="more-link">Read More</a>
+          </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
   <article id="post-xcode14-在设置中未找到-component-选项没办法切换和选择-simulator" class="h-entry post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   
   <div class="post-content">
@@ -156,6 +195,8 @@
 <div class="widget tag">
   <h3 class="title">Tags</h3>
   <ul class="entry">
+  
+    <li><a href="/tags/FixBug/">FixBug</a><small>1</small></li>
   
     <li><a href="/tags/app/">app</a><small>1</small></li>
   
